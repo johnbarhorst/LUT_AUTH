@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auth</title>
+</head>
+<body>
+  <h1>Hello!</h1>
+  <h3>Login</h3>
+  <form id="login-form">
+    <input type="email" name="email">
+    <input type="password" name="password">
+    <button type="submit">Login</button>
+   </form>
+   <br>
+   <hr>
+   <br>
+   <h3>Registration</h3>
+   <form id="registration-form">
+     <input type="email" name="email">
+     <input type="password" name="password">
+     <button type="submit">Register</button>
+    </form>
+    <script>
+      (() => {
+        const registerForm = document.getElementById("registration-form");
+        const loginForm = document.getElementById("login-form");
+        
+        registerForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          try {
+            const values = Object.values(registerForm).reduce((obj, field) => {
+              if(!field.name) return obj;
+              obj[field.name] = field.value;
+              return obj;
+            }, {});
+            const res = await fetch('/api/register', {
+              method: "POST",
+              body: JSON.stringify(values),
+              headers: {
+                "Content-type": "application/json; charset-UTF-8"
+              }
+            })
+          } catch(error) {
+            console.error(error);
+          }
+        });
+        
+        loginForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          try {
+            const values = Object.values(loginForm).reduce((obj, field) => {
+              if(!field.name) return obj;
+              obj[field.name] = field.value;
+              return obj;
+            }, {});
+            const res = await fetch('/api/authorize', {
+              method: "POST",
+              body: JSON.stringify(values),
+              headers: {
+                "Content-type": "application/json; charset-UTF-8"
+              }
+            })
+          } catch(error) {
+            console.error(error);
+          }
+        })
+
+      })()
+    </script>
+</body>
+</html>
