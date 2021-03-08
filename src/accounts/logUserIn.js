@@ -1,5 +1,6 @@
 import {createSession} from './session.js';
-import {createToken} from './tokens.js';
+import {createToken, setCookies} from './tokens.js';
+import { refreshTokens } from './user.js';
 
 
 export async function logUserIn(userId, req, res) {
@@ -14,18 +15,5 @@ export async function logUserIn(userId, req, res) {
   const {accessToken, refreshToken} = await createToken(sessionToken, userId);
 
   //set the cookie
-  const now = new Date();
-  const refreshExpires = now.setDate(now.getDate() + 30);
-  res
-  .setCookie('refreshToken', refreshToken, {
-    path: '/',
-    domain: 'localhost',
-    httpOnly: true,
-    expires: refreshExpires
-  })
-  .setCookie('accessToken', accessToken, {
-    path: '/',
-    domain: 'localhost',
-    httpOnly: true,
-  })
+  setCookies(res, accessToken, refreshToken);
 }

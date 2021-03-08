@@ -30,9 +30,14 @@ async function startApp() {
     app.post("/api/authorize", {}, authorize);
     app.get("/test", {}, async (req, res) => {
       // verify user login
-      const token = await getUserFromCookies(req);
+      const user = await getUserFromCookies(req, res);
       // otherwise return unauthorized
-      res.send({data: "Hey", token});
+      console.log("user",user);
+      if(user?._id) {
+        return res.send({user});
+      } else {
+        res.send({success: false, error: "Look up error"})
+      }
     })
     await app.listen(3000);
     console.log("🎧 Listening on port 3000");
