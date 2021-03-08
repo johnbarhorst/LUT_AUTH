@@ -8,8 +8,8 @@ import {fileURLToPath} from 'url';
 import {connectDB} from './db.js';
 import {register} from './handlers/register.js'
 import {authorize} from './handlers/authorize.js'
-import { getUserFromCookies } from './accounts/user.js';
-
+import {refresh} from './handlers/refresh.js';
+import { logout } from './handlers/logout.js';
 
 
 // ESM Specific boilerplate.
@@ -28,17 +28,8 @@ async function startApp() {
     });
     app.post("/api/register", {}, register);
     app.post("/api/authorize", {}, authorize);
-    app.get("/test", {}, async (req, res) => {
-      // verify user login
-      const user = await getUserFromCookies(req, res);
-      // otherwise return unauthorized
-      console.log("user",user);
-      if(user?._id) {
-        return res.send({user});
-      } else {
-        res.send({success: false, error: "Look up error"})
-      }
-    })
+    app.post("/api/logout", {}, logout);
+    app.get("/test", {}, refresh)
     await app.listen(3000);
     console.log("🎧 Listening on port 3000");
   } catch(error) {
