@@ -23,10 +23,15 @@
      <input type="password" name="password">
      <button type="submit">Register</button>
     </form>
+    <br>
+    <hr>
+    <br>
+    <button id="logout-button">Log Out</button>
     <script>
       (() => {
         const registerForm = document.getElementById("registration-form");
         const loginForm = document.getElementById("login-form");
+        const logoutButton = document.getElementById("logout-button");
         
         registerForm.addEventListener("submit", async (e) => {
           e.preventDefault();
@@ -64,6 +69,16 @@
               }
             })
           } catch(error) {
+            console.error(error);
+          }
+        })
+
+        logoutButton.addEventListener("click", async (e) => {
+          try {
+            const res = await fetch('/api/logout', {
+              method: "POST",
+            })
+          } catch (error) {
             console.error(error);
           }
         })
